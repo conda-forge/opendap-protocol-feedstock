@@ -6,22 +6,23 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/opendap-protocol-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/opendap-protocol-{{ version }}.tar.gz
   sha256: 3cc257b45e04082eb44540c2e7b98c8336008942349ef324c88aca7027026fc8
 
 build:
-  number: 0
+  number: 1
   noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
-    - python >=3.6
+    - python {{ python_min }}
+    - setuptools
     - pip
     - pytest-runner
     - setuptools-scm
   run:
-    - python >=3.6
+    - python >={{ python_min }}
     - dask-core
     - numpy
     - toolz
@@ -33,6 +34,7 @@ test:
     - pip check
   requires:
     - pip
+    - python {{ python_min }}
 
 about:
   home: https://github.com/MeteoSwiss/opendap-protocol
